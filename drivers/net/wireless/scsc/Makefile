@@ -140,8 +140,8 @@ ccflags-$(CONFIG_SCSC_WLAN_ANDROID) += -DCONFIG_SCSC_WLAN_ANDROID
 ccflags-y += -Idrivers/misc/samsung/scsc
 
 # Android Platform version
-ccflags-y += -DSCSC_SEP_VERSION=$(ANDROID_PLATFORM_VERSION)
-$(info ANDROID_PLATFORM_VERSION is $(ANDROID_PLATFORM_VERSION))
+ccflags-y += -DSCSC_SEP_VERSION=$(CONFIG_ANDROID_PLATFORM_VERSION)
+$(info ANDROID_PLATFORM_VERSION is $(CONFIG_ANDROID_PLATFORM_VERSION))
 
 ## See drivers/misc/samsung/scsc/ Makefile for an explanation of the reasons
 ## of the following ifeq/else
