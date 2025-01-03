@@ -160,7 +160,7 @@ scsc_dbg_sampler-y += mx_dbg_sampler.o
 endif
 
 # Android Platform version
-ccflags-y += -DSCSC_SEP_VERSION=$(ANDROID_PLATFORM_VERSION)
+ccflags-y += -DSCSC_SEP_VERSION=$(CONFIG_ANDROID_PLATFORM_VERSION)
 $(info ANDROID_PLATFORM_VERSION is $(CONFIG_ANDROID_PLATFORM_VERSION))
 
 # The below section is only for DTE purpose. It is controlled by the flag SCSC_DTE_BUILD which is set only by the
