@@ -8,7 +8,6 @@
 # << If unset
 [ -z $IS_CI ] && IS_CI=false
 [ -z $DO_CLEAN ] && DO_CLEAN=false
-[ -z $LTO ] && LTO=none
 [ -z $DEFAULT_KSU_REPO ] && DEFAULT_KSU_REPO="https://raw.githubusercontent.com/rsuntk/KernelSU/main/kernel/setup.sh"
 [ -z $DEVICE ] && DEVICE="Unknown"
 
@@ -77,7 +76,6 @@ usage() {
 	printf "\n"
 	printf "Misc:\n"
 	printf "\tPOST_BUILD_CLEAN: Clean post build: (opt:boolean)\n"
-	printf "\tLTO: Use Link-time Optimization; options: (opt: none, thin, full)\n"
 	printf "\tLLVM: Use all llvm toolchains to build: (opt: 1)\n"
 	printf "\tLLVM_IAS: Use llvm integrated assembler: (opt: 1)\n"
 	exit;
@@ -199,8 +197,6 @@ pr_sum() {
 	echo -e "LLVM: $LLVM_"
 	echo -e "LLVM_IAS: $LLVM_IAS_"
 	echo ""
-	echo -e "LTO: $LTO"
-	echo ""
 }
 
 # call summary
@@ -267,31 +263,6 @@ post_build() {
 if [ "$BUILD" = "kernel" ]; then
 	make -j`echo $ALLOC_JOB` -C $(pwd) O=$(pwd)/out `echo $DEFAULT_ARGS` `echo $BUILD_DEFCONFIG`
 	[ "$KERNELSU" = "true" ] && setconfig enable KSU
-	if [[ "$LTO" = "thin" ]]; then
-		echo "[build] LTO: thin"
-		setconfig disable LTO_NONE
-		setconfig enable LTO
-		setconfig enable THINLTO
-		setconfig enable LTO_CLANG
-		setconfig enable ARCH_SUPPORTS_LTO_CLANG
-		setconfig enable ARCH_SUPPORTS_THINLTO
-	elif [[ "$LTO" = "full" ]]; then
-		echo "[build] LTO: full"
-		setconfig disable LTO_NONE
-		setconfig enable LTO
-		setconfig disable THINLTO
-		setconfig enable LTO_CLANG
-		setconfig enable ARCH_SUPPORTS_LTO_CLANG
-		setconfig enable ARCH_SUPPORTS_THINLTO
-	else
-		echo "[build] LTO: none"
-		setconfig enable LTO_NONE
-		setconfig disable LTO
-		setconfig disable THINLTO
-		setconfig disable LTO_CLANG
-		setconfig enable ARCH_SUPPORTS_LTO_CLANG
-		setconfig enable ARCH_SUPPORTS_THINLTO
-	fi
 	make -j`echo $ALLOC_JOB` -C $(pwd) O=$(pwd)/out `echo $DEFAULT_ARGS`
 	if [ -e $IMAGE ]; then
 		pr_post_build "completed"
