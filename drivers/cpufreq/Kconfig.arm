@@ -308,6 +308,11 @@ config ARM_EXYNOS_ACME
 
 	  If in doubt, say N.
 
+config OVERCLOCK_EXYNOS_ACME
+	bool "Enable overclocking to ACME driver (unstable warning)"
+	depends on ARM_EXYNOS_ACME
+	default n
+	
 config ARM_EXYNOS_UFC
 	bool "SAMSUNG EXYNOS UFC(User Frequency Control) driver"
 	depends on ARM_EXYNOS_ACME

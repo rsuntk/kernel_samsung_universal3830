@@ -1399,6 +1399,12 @@ static __init void init_slack_timer(struct exynos_cpufreq_domain *domain,
 	}
 }
 
+#ifdef CONFIG_OVERCLOCK_EXYNOS_ACME
+#include "exynos_acme_def.h"
+static unsigned int arg_cpu_min = CORE_MIN; 
+static unsigned int arg_cpu_max = CORE_MAX;
+#endif /* CONFIG_OVERCLOCK_EXYNOS_ACME */
+
 static __init int init_domain(struct exynos_cpufreq_domain *domain,
 					struct device_node *dn)
 {
@@ -1417,10 +1423,17 @@ static __init int init_domain(struct exynos_cpufreq_domain *domain,
 	 * tree and CAL. In case of min-freq, min frequency is selected
 	 * to bigger one.
 	 */
+#ifndef CONFIG_OVERCLOCK_EXYNOS_ACME
 	if (!of_property_read_u32(dn, "max-freq", &val))
 		domain->max_freq = min(domain->max_freq, val);
 	if (!of_property_read_u32(dn, "min-freq", &val))
 		domain->min_freq = max(domain->min_freq, val);
+#else
+	pr_info("initial domain: max: %u, min: %u\n", arg_cpu_max, arg_cpu_min);
+	domain->max_freq = arg_cpu_max;
+	domain->min_freq = arg_cpu_min;
+	pr_info("post-initial domain: max: %u, min: %u\n", domain->max_freq, domain->min_freq);
+#endif
 
 	/* If this domain has boost freq, change max */
 	val = exynos_pstate_get_boost_freq(cpumask_first(&domain->cpus));
