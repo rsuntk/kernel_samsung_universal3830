@@ -39,6 +39,7 @@ setconfig() { # fmt: setconfig enable/disable <NAME>
 	fi
 }
 
+gen_getutsrelease() {
 # generate simple c file
 if [ ! -e utsrelease.c ]; then
 echo "/* Generated file by `basename $0` */
@@ -56,6 +57,7 @@ int main() {
 	return 0;
 }" > utsrelease.c
 fi
+}
 
 pr_invalid() {
 	echo -e "Invalid args: $@"
@@ -237,13 +239,14 @@ post_build() {
 	
 	if [ -d $AK3 ]; then
 		echo "- Creating AnyKernel3"
+		gen_getutsrelease;
 		if [ -d $(pwd)/out ]; then
 			gcc -D__OUT__ -CC utsrelease.c -o getutsrel
 		else
 			gcc -CC utsrelease.c -o getutsrel
 		fi
 		UTSRELEASE=$(./getutsrel)
-		sed -i "s/do\.modules=.*/do.modules=0/" "$(pwd)/AnyKernel3/anykernel.sh"
+		#sed -i "s/do\.modules=.*/do.modules=0/" "$(pwd)/AnyKernel3/anykernel.sh"
 		cp $IMAGE $AK3
 		cd $AK3
 		zip -r9 ../`echo $ZIP_FMT`.zip *
