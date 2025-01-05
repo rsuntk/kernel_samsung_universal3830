@@ -43,11 +43,7 @@ struct fscrypt_name {
 #define fname_len(p)		((p)->disk_name.len)
 
 /* Maximum value for the third parameter of fscrypt_operations.set_context(). */
-#ifdef CONFIG_FSCRYPT_SDP
-#define FSCRYPT_SET_CONTEXT_MAX_SIZE	44
-#else
 #define FSCRYPT_SET_CONTEXT_MAX_SIZE	40
-#endif
 
 #ifdef CONFIG_FS_ENCRYPTION
 /*
@@ -63,10 +59,6 @@ struct fscrypt_operations {
 	const char *key_prefix;
 	int (*get_context)(struct inode *, void *, size_t);
 	int (*set_context)(struct inode *, const void *, size_t, void *);
-#ifdef CONFIG_FSCRYPT_SDP
-	int (*get_knox_context)(struct inode *, const char *, void *, size_t);
-	int (*set_knox_context)(struct inode *, const char *, const void *, size_t, void *);
-#endif
 	bool (*dummy_context)(struct inode *);
 	bool (*empty_dir)(struct inode *);
 	unsigned int max_namelen;
@@ -172,17 +164,6 @@ extern int fscrypt_get_encryption_info(struct inode *);
 extern void fscrypt_put_encryption_info(struct inode *);
 extern void fscrypt_free_inode(struct inode *);
 extern int fscrypt_drop_inode(struct inode *inode);
-#ifdef CONFIG_FSCRYPT_SDP
-extern int fscrypt_get_encryption_key(
-						struct fscrypt_info *crypt_info,
-						struct fscrypt_key *key);
-extern int fscrypt_get_encryption_key_classified(
-						struct fscrypt_info *crypt_info,
-						struct fscrypt_key *key);
-extern int fscrypt_get_encryption_kek(
-						struct fscrypt_info *crypt_info,
-						struct fscrypt_key *kek);
-#endif
 
 /* fname.c */
 extern int fscrypt_setup_filename(struct inode *, const struct qstr *,
