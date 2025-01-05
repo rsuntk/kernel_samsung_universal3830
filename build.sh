@@ -242,9 +242,9 @@ post_build() {
 	DATE=$(date +'%Y%m%d%H%M%S')
 	ZIP_FMT="AnyKernel3-`echo $DEVICE`_$GITSHA-$DATE"
 	
+	clone_ak3;
 	if [ -d $AK3 ]; then
 		echo "- Creating AnyKernel3"
-		clone_ak3;
 		gen_getutsrelease;
 		if [ -d $(pwd)/out ]; then
 			gcc -D__OUT__ -CC utsrelease.c -o getutsrel
