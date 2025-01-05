@@ -156,6 +156,9 @@ config USB_DUN_SUPPORT
 	  It uses misc register.
 	  Support fops : open, close, release, read, poll, llseek, ioctl
 
+config USB_MTP_SAMSUNG
+	bool "Use Samsung MTP driver"
+
 source "drivers/usb/gadget/udc/Kconfig"
 
 #
