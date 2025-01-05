@@ -253,7 +253,7 @@ post_build() {
 		fi
 		UTSRELEASE=$(./getutsrel)
 		sed -i "s/kernel\.string=.*/kernel.string=$UTSRELEASE/" "$AK3/anykernel.sh"
-		sed -i "s/block=.*/block=\/dev\/block\/platform\/12100000.dwmmc0\/by-name\/boot;/" "$AK3/anykernel.sh"
+		sed -i "s/BLOCK=.*/BLOCK=\/dev\/block\/platform\/12100000.dwmmc0\/by-name\/boot;/" "$AK3/anykernel.sh"
 		cp $IMAGE $AK3
 		cd $AK3
 		zip -r9 ../`echo $ZIP_FMT`.zip *
