@@ -124,7 +124,7 @@ elif [[ "$1" = "ak3" ]]; then
 		echo "! Excess argument, only need one argument."
 		exit
 	fi
-	[ ! -d $(pwd)/AnyKernel3 ] && git clone https://github.com/rsuntk/AnyKernel3.git || exit
+	[ ! -d $(pwd)/AnyKernel3 ] && git clone https://github.com/rsuntk/AnyKernel3.git --depth=1 || exit
 else
 	[ $# != 4 ] && usage;
 fi
