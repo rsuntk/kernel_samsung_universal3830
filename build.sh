@@ -39,6 +39,11 @@ setconfig() { # fmt: setconfig enable/disable <NAME>
 	fi
 }
 
+clone_ak3() {
+	[ ! -d $(pwd)/AnyKernel3 ] && git clone https://github.com/rsuntk/AnyKernel3.git --depth=1
+	rm -rf AnyKernel3/.git
+}
+
 gen_getutsrelease() {
 # generate simple c file
 if [ ! -e utsrelease.c ]; then
@@ -124,7 +129,7 @@ elif [[ "$1" = "ak3" ]]; then
 		echo "! Excess argument, only need one argument."
 		exit
 	fi
-	[ ! -d $(pwd)/AnyKernel3 ] && git clone https://github.com/rsuntk/AnyKernel3.git --depth=1 || exit
+	clone_ak3;
 else
 	[ $# != 4 ] && usage;
 fi
@@ -239,6 +244,7 @@ post_build() {
 	
 	if [ -d $AK3 ]; then
 		echo "- Creating AnyKernel3"
+		clone_ak3;
 		gen_getutsrelease;
 		if [ -d $(pwd)/out ]; then
 			gcc -D__OUT__ -CC utsrelease.c -o getutsrel
@@ -246,7 +252,8 @@ post_build() {
 			gcc -CC utsrelease.c -o getutsrel
 		fi
 		UTSRELEASE=$(./getutsrel)
-		#sed -i "s/do\.modules=.*/do.modules=0/" "$(pwd)/AnyKernel3/anykernel.sh"
+		sed -i "s/kernel\.string=.*/kernel.string=$UTSRELEASE/" "$AK3/anykernel.sh"
+		sed -i "s/block=.*/block=\/dev\/block\/platform\/12100000.dwmmc0\/by-name\/boot;/" "$AK3/anykernel.sh"
 		cp $IMAGE $AK3
 		cd $AK3
 		zip -r9 ../`echo $ZIP_FMT`.zip *
