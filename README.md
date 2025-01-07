@@ -1,4 +1,6 @@
 # Samsung Galaxy A12s/A12 Nacho Kernel source
+> This source is based on A127FXXSDDXJ6 source
+
 ### Target
 Get blazing fast performance while maintaining the consistent linux version (4.19.111)
 
