@@ -334,7 +334,8 @@ static unsigned int exynos_cpufreq_resolve(struct cpufreq_policy *policy,
 	return policy->freq_table[index].frequency;
 }
 
-
+/* Rissu changes on 10/01/2025 */
+#ifndef CONFIG_OVERCLOCK_EXYNOS_ACME
 static int exynos_cpufreq_verify(struct cpufreq_policy *policy)
 {
 	struct exynos_cpufreq_domain *domain = find_domain(policy->cpu);
@@ -344,6 +345,13 @@ static int exynos_cpufreq_verify(struct cpufreq_policy *policy)
 
 	return cpufreq_frequency_table_verify(policy, domain->freq_table);
 }
+#else
+static int exynos_cpufreq_verify(struct cpufreq_policy *policy) 
+{
+	pr_info("BYPASS: %s, always return 0 !!\n", __func__);
+	return 0;
+}
+#endif
 
 static int __exynos_cpufreq_target(struct cpufreq_policy *policy,
 				  unsigned int target_freq,
@@ -365,6 +373,7 @@ static int __exynos_cpufreq_target(struct cpufreq_policy *policy,
 		goto out;
 	}
 
+#ifndef CONFIG_OVERCLOCK_EXYNOS_ACME
 	if (domain->old != get_freq(domain)) {
 		pr_err("oops, inconsistency between domain->old:%d, real clk:%d\n",
 			domain->old, get_freq(domain));
@@ -375,6 +384,10 @@ static int __exynos_cpufreq_target(struct cpufreq_policy *policy,
 	if (target_freq != resolve_freq)
 		pr_debug("%s:%d target_freq(%u) is differ with resolve_freq(%u)\n",
 				__func__, __LINE__, target_freq, resolve_freq);
+#else
+	pr_debug("BYPASS: %s: inconsistency between domain->old:%d, real clk:%d\n",
+			__func__, domain->old, get_freq(domain));
+#endif
 
 	if (relation == CPUFREQ_RELATION_H) {
 		opp = dev_pm_opp_find_freq_floor(dev, &freq_khz);
