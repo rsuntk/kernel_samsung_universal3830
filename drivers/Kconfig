@@ -1,6 +1,13 @@
 # SPDX-License-Identifier: GPL-2.0
 menu "Device Drivers"
 
+config KSU_HAS_SUSFS
+	bool "KernelSU has SusFS driver embedded"
+	default n
+	help
+	  If this option is enabled, then KernelSU driver with susfs driver
+	  embedded will be used.
+
 source "drivers/amba/Kconfig"
 
 source "drivers/base/Kconfig"

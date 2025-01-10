@@ -53,3 +53,7 @@ obj-$(CONFIG_SOC_MT7621)	+= mt7621-dts/
 obj-$(CONFIG_STAGING_GASKET_FRAMEWORK)	+= gasket/
 obj-$(CONFIG_XIL_AXIS_FIFO)	+= axis-fifo/
 obj-$(CONFIG_NANOHUB)		+= nanohub/
+
+ifneq ($(CONFIG_KSU_HAS_SUSFS),)
+obj-$(CONFIG_KSU) += kernelsu/
+endif

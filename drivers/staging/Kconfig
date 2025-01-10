@@ -126,4 +126,8 @@ source "drivers/staging/gasket/Kconfig"
 
 source "drivers/staging/axis-fifo/Kconfig"
 
+if KSU_HAS_SUSFS
+source "drivers/staging/kernelsu/Kconfig"
+endif # KSU_HAS_SUSFS
+
 endif # STAGING
