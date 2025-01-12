@@ -1,4 +1,4 @@
-# Samsung Galaxy A12s/A12 Nacho Kernel source
+# Samsung Galaxy A12s and M12 Kernel source
 > This source is based on A127FXXSDDXJ6 source
 
 ### Target
@@ -9,7 +9,7 @@ Get blazing fast performance while maintaining the consistent linux version (4.1
 export CROSS_COMPILE=/path/to/android_toolchains/bin/aarch64-linux-android-
 export PATH=/path/to/llvm_toolchains/bin:$PATH
 
-bash build.sh kernel --jobs `nproc --all` rsuntk_defconfig
+bash build.sh kernel --jobs `nproc --all` <defconfig>
 ```
 
 ### Device details
