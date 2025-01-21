@@ -5494,6 +5494,14 @@ static void dequeue_task_fair(struct rq *rq, struct task_struct *p, int flags)
 	struct sched_entity *se = &p->se;
 	int task_sleep = flags & DEQUEUE_SLEEP;
 
+	/*
+	 * The code below (indirectly) updates schedutil which looks at
+	 * the cfs_rq utilization to select a frequency.
+	 * Let's update schedtune here to ensure the boost value of the
+	 * current task is not more accounted for in the selection of the OPP.
+	 */
+	schedtune_dequeue_task(p, cpu_of(rq));
+
 #ifdef CONFIG_SCHED_BORE
 	if (task_sleep) {
 		cfs_rq = cfs_rq_of(se);
@@ -5502,14 +5510,6 @@ static void dequeue_task_fair(struct rq *rq, struct task_struct *p, int flags)
 		restart_burst(se);
 	}
 #endif // CONFIG_SCHED_BORE
-	
-	/*
-	 * The code below (indirectly) updates schedutil which looks at
-	 * the cfs_rq utilization to select a frequency.
-	 * Let's update schedtune here to ensure the boost value of the
-	 * current task is not more accounted for in the selection of the OPP.
-	 */
-	schedtune_dequeue_task(p, cpu_of(rq));
 
 	for_each_sched_entity(se) {
 		cfs_rq = cfs_rq_of(se);
