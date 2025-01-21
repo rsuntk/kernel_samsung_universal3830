@@ -1,4 +1,4 @@
-# Samsung Galaxy A12s and M12 Kernel source
+# Samsung Galaxy A12s, M12, M12 Korea and F12 Kernel source
 > This source is based on A127FXXSDDXJ6 source
 
 ### Target
