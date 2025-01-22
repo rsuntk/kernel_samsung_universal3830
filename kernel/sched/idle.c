@@ -412,11 +412,8 @@ static void
 dequeue_task_idle(struct rq *rq, struct task_struct *p, int flags)
 {
 	raw_spin_unlock_irq(&rq->lock);
-	pr_auto(ASL6, "bad: scheduling from the idle thread!\n");
+	printk(KERN_ERR "bad: scheduling from the idle thread!\n");
 	dump_stack();
-#ifdef CONFIG_SEC_DEBUG_ATOMIC_SLEEP_PANIC
-	BUG();
-#endif
 	raw_spin_lock_irq(&rq->lock);
 }
 
