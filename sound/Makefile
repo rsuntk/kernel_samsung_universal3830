@@ -5,8 +5,8 @@
 # Optimize Size for sound driver
 SOUND_CCFLAGS := -Os -g0
 SOUND_LDFLAGS := -s
-ccflags-y += $(SOUND_CFLAGS)
-subdir-ccflags-y += $(SOUND_CFLAGS)
+ccflags-y += $(SOUND_CCFLAGS)
+subdir-ccflags-y += $(SOUND_CCFLAGS)
 ldflags-y += $(SOUND_LDFLAGS)
 
 obj-$(CONFIG_SOUND) += soundcore.o
